@@ -18,3 +18,6 @@ def draw_card():
         return draw_red()
 
 
+def is_burst(score):
+    return score > 21 or score < 1
+
