@@ -47,10 +47,30 @@ def step(state, action):
         state.terminal = True
 
 
-    # calculate and return the reward of this step
     # if the player has gone burst, reward = -1
     # if the dealer has gone burst, reward = 1
     # if the player has a larger score, it wins(reward=1) otherwise it looses(reward=0)
     # a draw gives reward = 0
+
+    # Only compute reward if we are in a terminal state
+    reward = 0
+    if state.terminal:
+        if player_is_burst:
+            reward = -1
+        elif dealer_is_burst:
+            reward = 1
+        else:
+            if state.player > state.dealer:
+                reward = 1
+            elif state.player < state.dealer:
+                reward = -1
+            elif state.player == state.dealer: # a draw
+                reward = 0
+
+    else:
+        return None # hopefully we never get here
+
+    return reward
+
 
 
