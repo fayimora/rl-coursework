@@ -1,10 +1,13 @@
 from random import randint
 
+
 def draw_black():
     return randint(1, 10)
 
+
 def draw_red():
     return -randint(1, 10)
+
 
 def draw_card():
     """black is drwan with probability 2/3"""
@@ -13,4 +16,5 @@ def draw_card():
         return draw_black()
     else:
         return draw_red()
+
 
