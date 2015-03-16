@@ -4,15 +4,14 @@ from random import randint, random
 HIT = 1
 STICK = 0
 
-def draw_black():
-    return randint(1, 10)
-
-
-def draw_red():
-    return -randint(1, 10)
-
 
 def draw_card():
+    def draw_black():
+        return randint(1, 10)
+
+    def draw_red():
+        return -randint(1, 10)
+
     """black is drwan with probability 2/3"""
     probability = random()
     if probability <= float(2) / 3:
