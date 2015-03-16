@@ -1,3 +1,5 @@
+from collections import defaultdict
+
 # A value function is simply a map from state -> value
 class Value(defaultdict):
     def __getitem__(self, (dealer, player)):
