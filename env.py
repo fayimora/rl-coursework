@@ -1,4 +1,4 @@
-from random import randint
+from random import randint, random
 
 # make the hit and stack actions numbers so my if statements are cleaner
 HIT = 1
@@ -14,7 +14,7 @@ def draw_red():
 
 def draw_card():
     """black is drwan with probability 2/3"""
-    probability = random.random()
+    probability = random()
     if probability <= float(2) / 3:
         return draw_black()
     else:
@@ -30,7 +30,7 @@ def step(state, action):
     dealer_is_burst = False
 
     if action is HIT:
-        state.player += draw_card
+        state.player += draw_card()
         player_is_burst = is_burst(state.player)
 
         if player_is_burst:
@@ -71,6 +71,5 @@ def step(state, action):
         return None # hopefully we never get here
 
     return reward
-
 
 
