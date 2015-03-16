@@ -12,3 +12,7 @@ class State:
         # is the state a terminal one or not?
         self.terminal = False
 
+    # string representation for debugging
+    def __str__(self):
+        return "dealer: %s player: %s" % (self.dealer, self.player)
+
