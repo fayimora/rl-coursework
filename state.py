@@ -9,4 +9,6 @@ class State:
         elif dealer is None and player is None:
             self.dealer = randint(1, 10)
             self.player = randint(1, 10)
+        # is the state a terminal one or not?
+        self.terminal = False
 

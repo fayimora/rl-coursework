@@ -1,5 +1,8 @@
 from random import randint
 
+# make the hit and stack actions numbers so my if statements are cleaner
+HIT = 1
+STICK = 0
 
 def draw_black():
     return randint(1, 10)
@@ -20,4 +23,34 @@ def draw_card():
 
 def is_burst(score):
     return score > 21 or score < 1
+
+
+def step(state, action):
+    player_is_burst = False
+    dealer_is_burst = False
+
+    if action is HIT:
+        state.player += draw_card
+        player_is_burst = is_burst(state.player)
+
+        if player_is_burst:
+                state.terminal = True
+    elif action is STICK:
+        dealer_action = HIT
+        # dealer's turn to play since player has given up
+        while dealer_action == HIT and not dealer_is_burst:
+            state.dealer += draw_card()
+            dealer_is_burst = is_burst(state.dealer)
+            # STICK if > 17 else HIT
+            dealer_action = HIT if 1 <= state.dealer <= 16 else STICK
+
+        state.terminal = True
+
+
+    # calculate and return the reward of this step
+    # if the player has gone burst, reward = -1
+    # if the dealer has gone burst, reward = 1
+    # if the player has a larger score, it wins(reward=1) otherwise it looses(reward=0)
+    # a draw gives reward = 0
+
 
