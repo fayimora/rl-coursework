@@ -67,7 +67,7 @@ def step(state, action):
                 reward = 0
 
     else:
-        return None # hopefully we never get here
+        return None
 
     return reward
 
