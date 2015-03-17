@@ -6,7 +6,7 @@ from random import randint, random
 
 # if our random value > epsilon, then pick HIT or STICK, depending on which action is better (exploitation)
 # else randomly return HIT or STICK (exploration)
-def epsilon_greedy(action_value, state, epsilon):
+def greedy_policy(action_value, state, epsilon):
     HIT, STICK = 1, 0
     if random() > epsilon:
         hit_value = action_value[(state.dealer, state.player, HIT)]
@@ -69,7 +69,7 @@ if __name__ == '__main__':
             dealer = state.dealer
 
             epsilon = float(n_zero) / (n_zero + n_states[(dealer, player)])
-            action = epsilon_greedy(action_value_function, state, epsilon)
+            action = greedy_policy(action_value_function, state, epsilon)
 
             n_states[(dealer, player)] += 1
             n_state_actions[(dealer, player, action)] += 1
