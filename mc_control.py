@@ -4,14 +4,29 @@ from value_functions import ActionValue
 from collections import defaultdict
 from random import randint, random
 
-# stub epsilon for now
+# if our random value > epsilon, then pick HIT or STICK, depending on which action is better (exploitation)
+# else randomly return HIT or STICK (exploration)
 def epsilon_greedy(action_value, state, epsilon):
-    HIT = 0
-    STICK = 1
-    if randint(1, 10) > 6:
-        return HIT
+    HIT, STICK = 1, 0
+    if random() > epsilon:
+        hit_value = action_value[(state.dealer, state.player, HIT)]
+        stick_value = action_value[(state.dealer, state.player, STICK)]
+        if hit_value > stick_value:
+            return HIT
+        elif hit_value < stick_value:
+            return STICK
+        else:
+            # return random action when both value functions are same
+            if random() > 0.5:
+                return HIT
+            else:
+                return STICK
     else:
-        return STICK
+        if random() > 0.5:
+            return HIT
+        else:
+            return STICK
+
 
 
 def plot_value_function(value_function, title):
@@ -43,9 +58,11 @@ if __name__ == '__main__':
     n_state_actions = defaultdict(int)
 
     n_zero = 100
-    episodes = xrange(100000)
+    episodes = xrange(1000000)
 
     for episode in episodes:
+        if episode%10000 == 0:
+            print "episode: %d" % episode
         state = State()
         while not state.terminal:
             player = state.player
