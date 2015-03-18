@@ -53,7 +53,7 @@ def plot_value_function(value_function, title):
 
 
 if __name__ == '__main__':
-    action_value_function = ActionValue(float)
+    action_value_function = defaultdict(float)
     n_states = defaultdict(int)
     n_state_actions = defaultdict(int)
 
@@ -81,7 +81,9 @@ if __name__ == '__main__':
             action_value = action_value_function[(dealer, player, action)]
             action_value_function[(dealer, player, action)] += alpha * (reward - action_value)
 
-    value_function = action_value_function.to_value_function()
+    from common import action_value_to_value_function
+    # value_function = action_value_function.to_value_function()
+    value_function = action_value_to_value_function(action_value_function)
     plot_value_function(value_function, "Optimal Value Function: Question 2")
 
 
