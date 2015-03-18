@@ -4,6 +4,7 @@ from value_functions import ActionValue
 from collections import defaultdict
 from random import randint, random
 from common import action_value_to_value_function, plot_value_function
+from progressbar import ProgressBar
 
 HIT, STICK = 1, 0
 
@@ -39,9 +40,8 @@ if __name__ == '__main__':
     n_zero = 100
     episodes = xrange(1000000)
 
+    pbar = ProgressBar(maxval=len(episodes)).start()
     for episode in episodes:
-        if episode%100000 == 0:
-            print " Looking at episode: %d" % episode
         state = State()
         while not state.terminal:
             player = state.player
@@ -60,7 +60,8 @@ if __name__ == '__main__':
             action_value = action_value_function[(dealer, player, action)]
             action_value_function[(dealer, player, action)] += alpha * (reward - action_value)
 
-    # value_function = action_value_function.to_value_function()
+        pbar.update(episode)
+    pbar.finish()
     value_function = action_value_to_value_function(action_value_function)
     plot_value_function(value_function, "Optimal Value Function: Question 2")
 
