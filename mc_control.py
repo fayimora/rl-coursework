@@ -3,33 +3,8 @@ from env import step
 from value_functions import ActionValue
 from collections import defaultdict
 from random import randint, random
-from common import action_value_to_value_function, plot_value_function
+from common import action_value_to_value_function, plot_value_function, epsilon_greedy_policy
 from progressbar import ProgressBar
-
-HIT, STICK = 1, 0
-
-# if our random value > epsilon, then pick HIT or STICK, depending on which action is better (exploitation)
-# else randomly return HIT or STICK (exploration)
-def epsilon_greedy_policy(action_value, state, epsilon):
-    if random() > epsilon:
-        hit_value = action_value[(state.dealer, state.player, HIT)]
-        stick_value = action_value[(state.dealer, state.player, STICK)]
-        if hit_value > stick_value:
-            return HIT
-        elif hit_value < stick_value:
-            return STICK
-        else:
-            # return random action when both value functions are same
-            if random() > 0.5:
-                return HIT
-            else:
-                return STICK
-    else:
-        if random() > 0.5:
-            return HIT
-        else:
-            return STICK
-
 
 
 if __name__ == '__main__':
