@@ -3,6 +3,7 @@ from mpl_toolkits.mplot3d import Axes3D
 import numpy as np
 import pylab as plt
 from random import randint, random
+import cPickle
 
 
 HIT, STICK = 1, 0
@@ -65,5 +66,18 @@ def plot_value_function(value_function, title):
     ax.set_ylabel("Player Sum")
     ax.plot_surface(X, Y, Z, rstride=1, cstride=1)
     plt.show()
+
+
+def save(data, file):
+    fo = open(file, 'w')
+    cPickle.dump(data, fo, protocol=2)
+    fo.close()
+
+
+def load(file):
+    fo = open(file, 'rb')
+    dict = cPickle.load(fo)
+    fo.close()
+    return dict
 
 

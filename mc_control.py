@@ -3,17 +3,17 @@ from env import step
 from value_functions import ActionValue
 from collections import defaultdict
 from random import randint, random
-from common import action_value_to_value_function, plot_value_function, epsilon_greedy_policy
+from common import action_value_to_value_function, plot_value_function, epsilon_greedy_policy, save
 from progressbar import ProgressBar
 
 
-if __name__ == '__main__':
+def monte_carlo_control():
     action_value_function = defaultdict(float)
     n_states = defaultdict(int)
     n_state_actions = defaultdict(int)
 
     n_zero = 100
-    episodes = xrange(1000000)
+    episodes = xrange(10000000)
 
     pbar = ProgressBar(maxval=len(episodes)).start()
     for episode in episodes:
@@ -40,4 +40,9 @@ if __name__ == '__main__':
     value_function = action_value_to_value_function(action_value_function)
     plot_value_function(value_function, "Optimal Value Function: Question 2")
 
+    return action_value_function
 
+
+if __name__ == '__main__':
+    mc_action_value_function = monte_carlo_control()
+    save(mc_action_value_function, "mc_result.dat")
