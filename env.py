@@ -14,7 +14,7 @@ def draw_card():
 
     """black is drwan with probability 2/3"""
     probability = random()
-    if probability <= float(2) / 3:
+    if probability <= 2/3.0:
         return draw_black()
     else:
         return draw_red()
