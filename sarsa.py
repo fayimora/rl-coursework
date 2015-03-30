@@ -24,11 +24,11 @@ def compute_mse(action_value_function):
 
 
 def sarsa(gamma):
-    n_episodes = 1000
-    epi_batch = 100
+    n_episodes = 10000
+    epi_batch = 1000
     episodes = xrange(n_episodes)
     action_value_function = defaultdict(float)
-    n_zero = 100
+    n_zero = 10
     n_states = defaultdict(int)
     n_state_actions = defaultdict(int)
 
@@ -89,13 +89,14 @@ def sarsa(gamma):
 
     # plot mses curve
     if gamma == 0.0 or gamma == 1.0:
+        print "Plotting learning curve for gamma=",gamma
         x = range(0, n_episodes + 1, epi_batch)
         fig = plt.figure()
-        plt.title('Learning curve of Mean-Squared Error against episode number: gamma = ' + str(gamma))
+        plt.title('Learning curve of MSE against episode number: gamma = ' + str(gamma))
         plt.xlabel("episode number")
         plt.xlim([0, n_episodes])
         plt.xticks(range(0, n_episodes + 1, epi_batch))
-        plt.ylabel("Mean-Squared Error")
+        plt.ylabel("Mean-Squared Error (MSE)")
         plt.plot(x, mses)
         plt.show()
 
@@ -106,7 +107,7 @@ def sarsa(gamma):
 if __name__ == '__main__':
     mses = [0 for i in range(11)]
 
-    pbar = ProgressBar(maxval=11).start()
+    pbar = ProgressBar(maxval=len(mses)).start()
     for i in range(11):
         mses[i] = sarsa(gamma=float(i) / 10)
         pbar.update(i)
