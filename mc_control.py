@@ -12,7 +12,6 @@ def monte_carlo_control():
     n_states = defaultdict(int)
     n_state_actions = defaultdict(int)
 
-    # best seems to be 10mil and 1000
     n_zero = 1E5
     episodes = xrange(int(1E7))
 
