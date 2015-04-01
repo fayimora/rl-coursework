@@ -1,6 +1,5 @@
 from state import State
 from env import step
-from value_functions import ActionValue
 from collections import defaultdict
 from random import randint, random
 from common import action_value_to_value_function, plot_value_function, epsilon_greedy_policy, save

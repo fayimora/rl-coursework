@@ -6,18 +6,15 @@ STICK = 0
 
 
 def draw_card():
-    def draw_black():
-        return randint(1, 10)
+    black = randint(1, 10)
+    red   = -randint(1, 10)
 
-    def draw_red():
-        return -randint(1, 10)
-
-    """black is drwan with probability 2/3"""
+    # black is drwan with probability 2/3
     probability = random()
     if probability <= 2/3.0:
-        return draw_black()
+        return black
     else:
-        return draw_red()
+        return red
 
 
 def is_burst(score):
