@@ -4,8 +4,11 @@ from state import State
 from env import step
 from common import epsilon_greedy_policy, plot_value_function, action_value_to_value_function, load
 from progressbar import ProgressBar
+import matplotlib
 import pylab as plt
+matplotlib.use('Agg')
 from mc_control import monte_carlo_control
+from datetime import datetime
 
 
 def compute_mse(action_value_function):
@@ -47,7 +50,7 @@ def sarsa(gamma):
 
         epsilon = float(n_zero) / (n_zero + n_states[(current_dealer, current_player)])
         current_action = epsilon_greedy_policy(action_value_function, state, epsilon)
-        eligibility = defaultdict(int)
+        eligibility_trace = defaultdict(int)
 
         while not state.terminal:
             n_states[(current_dealer, current_player)] += 1
@@ -66,17 +69,17 @@ def sarsa(gamma):
             new_action_value = action_value_function[(new_dealer, new_player, new_action)]
 
             delta = reward + new_action_value - prev_action_value
-            eligibility[(current_dealer, current_player, current_action)] += 1
+            eligibility_trace[(current_dealer, current_player, current_action)] += 1
 
             for key in action_value_function.keys():
                 dealer, player, action = key
 
                 # update the action value function
                 action_value_function[(dealer, player, action)] \
-                    += alpha * delta * eligibility[(dealer, player, action)]
+                    += alpha * delta * eligibility_trace[(dealer, player, action)]
 
                 # update eligibility-trace
-                eligibility[(dealer, player, action)] *= gamma
+                eligibility_trace[(dealer, player, action)] *= gamma
 
             # update state and action
             current_dealer = new_dealer
@@ -98,7 +101,9 @@ def sarsa(gamma):
         plt.xticks(range(0, n_episodes + 1, epi_batch))
         plt.ylabel("Mean-Squared Error (MSE)")
         plt.plot(x, mses)
-        plt.show()
+        fname = "mse_gamma_%f_%s.png" % (gamma, str(datetime.now()))
+        plt.savefig(fname)
+        # plt.show()
 
     mse = compute_mse(action_value_function)
 
@@ -123,5 +128,7 @@ if __name__ == '__main__':
     plt.xticks(x)
     plt.ylabel("Mean-Squared Error")
     plt.plot(x, mses)
-    plt.show()
+    fname = "mse_vs_gamma_" + str(datetime.now())+".png"
+    plt.savefig(fname)
+    # plt.show()
 
