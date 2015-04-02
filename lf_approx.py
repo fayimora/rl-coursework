@@ -50,7 +50,7 @@ def sarsa(lambd):
     params_hit = np.array([0 for i in range(18)])
     params_stick = np.array([0 for i in range(18)])
     n_zero = 10
-    epsilon = 0.1
+    epsilon = 0.05
     alpha = 0.01
 
     if lambd == 0.0 or lambd == 1.0:
