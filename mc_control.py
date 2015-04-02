@@ -8,11 +8,11 @@ from progressbar import ProgressBar
 
 def monte_carlo_control():
     action_value_function = defaultdict(float)
-    n_states = defaultdict(int)
-    n_state_actions = defaultdict(int)
+    n_s = defaultdict(int)
+    n_s_a = defaultdict(int)
 
     n_zero = 1E5
-    episodes = xrange(int(1E7))
+    episodes = xrange(int(1E8))
 
     pbar = ProgressBar(maxval=len(episodes)).start()
     for episode in episodes:
@@ -21,18 +21,18 @@ def monte_carlo_control():
             player = state.player
             dealer = state.dealer
 
-            epsilon = float(n_zero) / (n_zero + n_states[(dealer, player)])
+            epsilon = float(n_zero) / (n_zero + n_s[(dealer, player)])
             action = epsilon_greedy_policy(action_value_function, state, epsilon)
 
-            n_states[(dealer, player)] += 1
-            n_state_actions[(dealer, player, action)] += 1
+            n_s[(dealer, player)] += 1
+            n_s_a[(dealer, player, action)] += 1
 
             reward = step(state, action)
 
             # update the action value function
-            alpha = 1.0 / n_state_actions[(dealer, player, action)]
-            action_value = action_value_function[(dealer, player, action)]
-            action_value_function[(dealer, player, action)] += alpha * (reward - action_value)
+            alpha = 1.0 / n_s_a[(dealer, player, action)]
+            new_reward = action_value_function[(dealer, player, action)]
+            action_value_function[(dealer, player, action)] += alpha * (reward - new_reward)
 
         pbar.update(episode)
     pbar.finish()
