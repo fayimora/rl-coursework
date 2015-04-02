@@ -26,21 +26,21 @@ def compute_mse(action_value_function):
     return mse
 
 
-def sarsa(gamma):
-    n_episodes = 10000
-    epi_batch = 1000
+def sarsa(lambd):
+    n_episodes = 1000
+    epi_batch = 100
     episodes = xrange(n_episodes)
     action_value_function = defaultdict(float)
     n_zero = 10
     n_states = defaultdict(int)
     n_state_actions = defaultdict(int)
 
-    if gamma == 0.0 or gamma == 1.0:
+    if lambd == 0.0 or lambd == 1.0:
         mses = []
 
     for episode in episodes:
         if episode%epi_batch == 0:
-            if gamma == 0.0 or gamma == 1.0:
+            if lambd == 0.0 or lambd == 1.0:
                 mses.append(compute_mse(action_value_function))
 
         # initialize state, action, epsilon, and eligibility-trace
@@ -79,7 +79,7 @@ def sarsa(gamma):
                     += alpha * delta * eligibility_trace[(dealer, player, action)]
 
                 # update eligibility-trace
-                eligibility_trace[(dealer, player, action)] *= gamma
+                eligibility_trace[(dealer, player, action)] *= lambd
 
             # update state and action
             current_dealer = new_dealer
@@ -87,21 +87,21 @@ def sarsa(gamma):
             current_action = new_action
 
 
-    if gamma == 0.0 or gamma == 1.0:
+    if lambd == 0.0 or lambd == 1.0:
         mses.append(compute_mse(action_value_function))
 
     # plot mses curve
-    if gamma == 0.0 or gamma == 1.0:
-        print "Plotting learning curve for gamma=",gamma
+    if lambd == 0.0 or lambd == 1.0:
+        print "Plotting learning curve for $\lambda$=",lambd
         x = range(0, n_episodes + 1, epi_batch)
         fig = plt.figure()
-        plt.title('Learning curve of MSE against episode number: gamma = ' + str(gamma))
+        plt.title('Learning curve of MSE against episode number: $\lambda$ = ' + str(lambd))
         plt.xlabel("episode number")
         plt.xlim([0, n_episodes])
         plt.xticks(range(0, n_episodes + 1, epi_batch))
         plt.ylabel("Mean-Squared Error (MSE)")
         plt.plot(x, mses)
-        fname = "mse_gamma_%f_%s.png" % (gamma, str(datetime.now()))
+        fname = "mse_lambda%f_%s.png" % (lambd, str(datetime.now()))
         plt.savefig(fname)
         # plt.show()
 
@@ -114,21 +114,21 @@ if __name__ == '__main__':
 
     pbar = ProgressBar(maxval=len(mses)).start()
     for i in range(11):
-        mses[i] = sarsa(gamma=float(i) / 10)
+        mses[i] = sarsa(lambd=float(i) / 10)
         pbar.update(i)
 
     pbar.finish()
 
-    # plot the mse against gamma
+    # plot the mse against lambda
     x = [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
     fig = plt.figure()
-    plt.title('Mean-Squared Error against gamma')
-    plt.xlabel("gamma")
+    plt.title('Mean-Squared Error against $\lambda$')
+    plt.xlabel("$\lambda$")
     plt.xlim([0., 1.])
     plt.xticks(x)
     plt.ylabel("Mean-Squared Error")
     plt.plot(x, mses)
-    fname = "mse_vs_gamma_" + str(datetime.now())+".png"
+    fname = "mse_vs_lamnda_" + str(datetime.now())+".png"
     plt.savefig(fname)
     # plt.show()
 
