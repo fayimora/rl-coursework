@@ -19,13 +19,9 @@ def action_value_to_value_function(action_value_function):
 
     for key in keys:
         dealer, player, action = key
-        hit_reward = action_value_function.get((dealer, player, HIT))
-        stick_reward = action_value_function.get((dealer, player, STICK))
-
-        if hit_reward > stick_reward:
-            value_function[(dealer, player)] = hit_reward
-        else:
-            value_function[(dealer, player)] = stick_reward
+        hit_reward = action_value_function[(dealer, player, HIT)]
+        stick_reward = action_value_function[(dealer, player, STICK)]
+        value_function[(dealer, player)] = max(hit_reward, stick_reward)
 
     return value_function
 
