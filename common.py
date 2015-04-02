@@ -28,16 +28,21 @@ def action_value_to_value_function(action_value_function):
 
 # if our random value > epsilon, then pick HIT or STICK, depending on which action is better (exploitation)
 # else randomly return HIT or STICK (exploration)
-def epsilon_greedy_policy(action_value, state, epsilon):
+def epsilon_greedy_policy(action_value_function, state, epsilon, features=None):
     if random() > epsilon:
-        hit_value = action_value[(state.dealer, state.player, HIT)]
-        stick_value = action_value[(state.dealer, state.player, STICK)]
+        hit_value, stick_value = 0, 0
+        if features is None:
+            hit_value = action_value_function[(state.dealer, state.player, HIT)]
+            stick_value = action_value_function[(state.dealer, state.player, STICK)]
+        else:
+            hit_value = action_value_function[(tuple(features), HIT)]
+            stick_value = action_value_function[(tuple(features), STICK)]
+
         if hit_value > stick_value:
             return HIT
         elif hit_value < stick_value:
             return STICK
         else:
-            # return random action when both value functions are same
             if random() > 0.5:
                 return HIT
             else:
@@ -51,7 +56,6 @@ def epsilon_greedy_policy(action_value, state, epsilon):
 
 
 def plot_value_function(value_function, title):
-    # plot the value function where x isthe dealer and y is the player
     x = range(1, 11)
     y = range(1, 22)
     X, Y = np.meshgrid(x, y)
