@@ -31,9 +31,9 @@ def sarsa(lambd):
     epi_batch = 100
     episodes = xrange(n_episodes)
     action_value_function = defaultdict(float)
-    n_zero = 10
-    n_states = defaultdict(int)
-    n_state_actions = defaultdict(int)
+    n_zero = 100
+    n_s = defaultdict(int)
+    n_s_a = defaultdict(int)
 
     if lambd == 0.0 or lambd == 1.0:
         mses = []
@@ -48,23 +48,23 @@ def sarsa(lambd):
         current_dealer = state.dealer
         current_player = state.player
 
-        epsilon = float(n_zero) / (n_zero + n_states[(current_dealer, current_player)])
+        epsilon = float(n_zero) / (n_zero + n_s[(current_dealer, current_player)])
         current_action = epsilon_greedy_policy(action_value_function, state, epsilon)
         eligibility_trace = defaultdict(int)
 
         while not state.terminal:
-            n_states[(current_dealer, current_player)] += 1
-            n_state_actions[(current_dealer, current_player, current_action)] += 1
+            n_s[(current_dealer, current_player)] += 1
+            n_s_a[(current_dealer, current_player, current_action)] += 1
 
             reward = step(state, current_action)
             new_dealer = state.dealer
             new_player = state.player
 
-            epsilon = float(n_zero) / (n_zero + n_states[(new_dealer, new_player)])
+            epsilon = float(n_zero) / (n_zero + n_s[(new_dealer, new_player)])
 
             new_action = epsilon_greedy_policy(action_value_function, state, epsilon)
 
-            alpha = 1.0 / n_state_actions[(current_dealer, current_player, current_action)]
+            alpha = 1.0 / n_s_a[(current_dealer, current_player, current_action)]
             prev_action_value = action_value_function[(current_dealer, current_player, current_action)]
             new_action_value = action_value_function[(new_dealer, new_player, new_action)]
 
